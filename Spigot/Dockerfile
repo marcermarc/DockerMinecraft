@@ -24,7 +24,7 @@ RUN mkdir -p /tmp/buildtool /opt/minecraft /mnt/minecraft \
   && mv spigot-*.jar /opt/minecraft/spigot.jar \
   && rm -rf /tmp/buildtool \
   && cd /opt/start \
-  && wget https://raw.githubusercontent.com/marcermarc/DockerSpigot/master/Start.java \
+  && wget https://raw.githubusercontent.com/marcermarc/DockerMinecraft/master/StartProgram/Start.java \
   && javac /opt/start/Start.java \
   && chmod +x /opt/start/Start.class \
   && apk del git wget \
