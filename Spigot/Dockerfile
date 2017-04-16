@@ -1,5 +1,7 @@
 FROM openjdk:8-jdk-alpine
 
+LABEL maintainer "docker@marcermarc.de"
+
 # -----------------------------------------------------------------------------------------------------------
 # Define version, heap and extra params
 # Default extra params from:
