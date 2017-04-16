@@ -16,7 +16,7 @@ ENV VERSION=latest \
 # Compile Start.java
 # Add user minecraft
 # ------------------------------
-RUN mkdir -p /tmp/buildtool /opt/minecraft /mnt/minecraft \
+RUN mkdir -p /tmp/buildtool /opt/minecraft /mnt/minecraft /opt/start \
   && apk add --update --no-cache git wget \
   && cd /tmp/buildtool \
   && wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar \
@@ -50,6 +50,6 @@ USER minecraft
 # ------------------------------------------
 # Start the Start.class with two parameters:
 #  1. The minecraft execute command
-#  2. The minecraft workidir
+#  2. The minecraft workdir
 # ------------------------------------------
 ENTRYPOINT ["java", "Start", "java -Xmx={$HEAP} -Xms={$HEAP} {$PARAMS} -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/spigot.jar nogui", "/mnt/minecraft"]
