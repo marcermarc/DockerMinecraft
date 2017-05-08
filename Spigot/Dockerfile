@@ -2,16 +2,10 @@ FROM openjdk:8-jdk-alpine
 
 LABEL maintainer "docker@marcermarc.de"
 
-# -----------------------------------------------------------------------------------------------------------
+# -------------------------------------
 # Define version, heap and extra params
-# Default extra params from:
-#  https://aquifermc.org/threads/optimizing-paper-remove-lag-spikes-fix-tps-improve-performance.101/#post-822
-# Set the classpath can start the Start.class
-# -----------------------------------------------------------------------------------------------------------
-ENV VERSION=latest \
-  HEAP=2G \
-  PARAMS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace" \
-  CLASSPATH=/opt/start
+# -------------------------------------
+ARG VERSION=latest
 
 # ------------------------------
 # Compile Spigot with BuildTools
@@ -48,6 +42,15 @@ VOLUME ["/mnt/minecraft"]
 # Set startup user
 # ----------------
 USER minecraft
+
+# -----------------------------------------------------------------------------------------------------------
+# Default extra params from:
+#  https://aquifermc.org/threads/optimizing-paper-remove-lag-spikes-fix-tps-improve-performance.101/#post-822
+# Set the classpath can start the Start.class
+# -----------------------------------------------------------------------------------------------------------
+ENV HEAP=2G \
+  PARAMS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace" \
+  CLASSPATH=/opt/start
 
 # ------------------------------------------
 # Start the Start.class with two parameters:
