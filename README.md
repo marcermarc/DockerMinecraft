@@ -1,4 +1,6 @@
-# DockerSpigot
-A Docker Image for Spigot
+# DockerMinecraft
+A Docker Image for Minecraft
+(Spigot and Forge)
 
-This Image includes the building of the Spigot jar and implements an Start and Stop Program so the server shutdown with the 'Stop' Command
+* Java program to start and stop the server regular
+* Only your userdata in the shared folder
