@@ -32,6 +32,7 @@ public class Start {
                 ProcessBuilder pb = new ProcessBuilder(args[0]);
                 pb = pb.directory(new File(args[1]));
                 pb = pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                pb.environment().putAll(System.getenv());
                 process = pb.start(); // init the process
                 output = process.getOutputStream(); // get the output-stream to write commands to the process
                 process.waitFor(); // wait for server-stop
