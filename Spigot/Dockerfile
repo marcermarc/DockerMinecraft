@@ -56,5 +56,5 @@ ENV HEAP=2G \
 # Start the Start.class with two parameters:
 #  1. The minecraft execute command
 #  2. The minecraft workdir
-# ------------------------------------------
-ENTRYPOINT ["java", "Start", "java -Xmx={$HEAP} -Xms={$HEAP} {$PARAMS} -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/spigot.jar nogui", "/mnt/minecraft"]
+# ------------------------------------------ -Xmx={$HEAP} -Xms={$HEAP} {$PARAMS}
+ENTRYPOINT ["java", "Start", "java -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/spigot.jar nogui", "/mnt/minecraft"]
