@@ -52,9 +52,9 @@ ENV HEAP=2G \
   PARAMS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace" \
   CLASSPATH=/opt/start
 
-# ------------------------------------------
+# ---------------------------------------------------------------------------------------
 # Start the Start.class with two parameters:
-#  1. The minecraft execute command
+#  1. The minecraft execute command ([HEAP] and [PARAM] are replaced by the startprogram)
 #  2. The minecraft workdir
-# ------------------------------------------ -Xmx={$HEAP} -Xms={$HEAP} {$PARAMS}
+# ---------------------------------------------------------------------------------------
 ENTRYPOINT ["java", "Start", "java -Xmx&HEAP& -Xms&HEAP& &PARAMS& -d64 -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/spigot.jar nogui", "/mnt/minecraft"]

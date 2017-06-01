@@ -57,9 +57,9 @@ VOLUME ["/mnt/minecraft"]
 # ----------------
 USER minecraft
 
-# ------------------------------------------
+# ---------------------------------------------------------------------------------------
 # Start the Start.class with two parameters:
-#  1. The minecraft execute command
-#  2. The minecraft workdir {$PARAMS} 
-# ------------------------------------------
+#  1. The minecraft execute command ([HEAP] and [PARAM] are replaced by the startprogram)
+#  2. The minecraft workdir
+# ---------------------------------------------------------------------------------------
 ENTRYPOINT ["java", "Start", "java -Xmx&HEAP& -Xms&HEAP& &PARAMS& -d64 -jar /opt/minecraft/forge.jar nogui", "/mnt/minecraft"]
