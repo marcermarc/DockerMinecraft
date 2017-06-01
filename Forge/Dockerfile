@@ -62,4 +62,4 @@ USER minecraft
 #  1. The minecraft execute command
 #  2. The minecraft workdir {$PARAMS} 
 # ------------------------------------------
-ENTRYPOINT ["java", "Start", "java -Xmx${HEAP} -Xms${HEAP} -jar /opt/minecraft/forge.jar nogui", "/mnt/minecraft"]
+ENTRYPOINT ["java", "Start", "java -Xmx&HEAP& -Xms&HEAP& &PARAMS& -d64 -jar /opt/minecraft/forge.jar nogui", "/mnt/minecraft"]

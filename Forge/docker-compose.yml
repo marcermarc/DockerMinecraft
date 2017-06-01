@@ -1,7 +1,7 @@
 version: "3"
 services:
-  spigot:
-    image: marcermarc/spigot:latest
+  forge:
+    image: marcermarc/forge:latest
     volumes:
       - ./data:/mnt/minecraft
     environment:
