@@ -2,18 +2,18 @@ FROM openjdk:8-jdk-alpine
 
 LABEL maintainer "docker@marcermarc.de"
 
-# -------------------------------------
-# Define version, heap and extra params
-# -------------------------------------
-#ARG VERSION=1.11.2
+# --------------
+# Define version
+# --------------
+ARG VERSION=1.11.2
 
 # -----------------------------------------------------------------------------------------------------------
+# Define heap and extra params
 # Default extra params from:
 #  https://aquifermc.org/threads/optimizing-paper-remove-lag-spikes-fix-tps-improve-performance.101/#post-822
 # Set the classpath can start the Start.class
 # -----------------------------------------------------------------------------------------------------------
-ENV VERSION=1.11.2 \
-  HEAP=2G \
+ENV HEAP=2G \
   PARAMS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace" \
   CLASSPATH=/opt/start
 
@@ -45,7 +45,7 @@ RUN mkdir -p /opt/minecraft /mnt/minecraft /opt/start /tmp/install \
 # ------------
 # Expose ports
 # ------------
-EXPOSE 25565:25565/tcp 25565:25565/udp 25575:25575/tcp
+EXPOSE 25565:25565/tcp 25565:25565/udp
 
 # -------------
 # Define volume
