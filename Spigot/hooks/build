@@ -1,3 +1,2 @@
 #!/bin/bash
-
 docker build --build-arg VERSION=$CACHE_TAG -t $IMAGE_NAME
