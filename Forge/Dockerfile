@@ -23,24 +23,22 @@ ENV HEAP=2G \
 # Add user minecraft
 # --------------------------
 RUN mkdir -p /opt/minecraft /mnt/minecraft /opt/start /tmp/install \
-  && apk add --update --no-cache --virtual=.build-dependencies jq openjdk8 curl \
-  && cd /tmp/install \
-  && if [ "$VERSION" = "latest" ]; then INDEX="index"; else INDEX="index_${VERSION}"; fi \
-  && curl -o forge-install.jar "https://files.minecraftforge.net/maven/net/minecraftforge/forge/$(curl https://files.minecraftforge.net/maven/net/minecraftforge/forge/${INDEX}.json | jq --raw-output '.md.versions | map(select(.marker == "LATEST"))[0].classifiers.installer.path')" \
-  && cd /opt/minecraft \
-  && java -jar /tmp/install/forge-install.jar --installServer \
-  && mv forge-*.jar forge.jar \
-  && rm -rf /tmp/install /opt/minecraft/forge-install.jar.log /opt/minecraft/mods \
-  && cd /opt/start \
-  && curl -o Start.java https://raw.githubusercontent.com/marcermarc/DockerMinecraft/master/StartProgram/Start.java \
-  && /usr/lib/jvm/java-1.8-openjdk/bin/javac /opt/start/Start.java \
-  && chmod +x /opt/start/Start.class \
-  && apk del --no-cache .build-dependencies \
-  && apk add --no-cache openjdk8-jre-base \
-  && adduser -D minecraft \
-  && chown -R minecraft /mnt/minecraft /opt/minecraft \
-  && chmod -R 777 /mnt/minecraft /opt/minecraft
- 
+ && adduser -D -h /opt/minecraft minecraft \
+ && chown -R minecraft /mnt/minecraft /opt/start /tmp/install \
+ && apk add --update --no-cache openjdk8-jre-base \
+ && apk add --update --no-cache --virtual=.build-dependencies openjdk8 jq curl \
+ && if [ "$VERSION" = "latest" ]; then export INDEX="index"; else export INDEX="index_${VERSION}"; fi \
+ && su -l minecraft -c " \
+        curl -o /tmp/install/forge-install.jar "https://files.minecraftforge.net/maven/net/minecraftforge/forge/$(curl https://files.minecraftforge.net/maven/net/minecraftforge/forge/${INDEX}.json | jq --raw-output '.md.versions | map(select(.marker == "LATEST"))[0].classifiers.installer.path')" \
+     && java -jar /tmp/install/forge-install.jar --installServer \
+     && mv forge-*.jar forge.jar \
+     && curl -o /opt/start/Start.java https://raw.githubusercontent.com/marcermarc/DockerMinecraft/master/StartProgram/Start.java \
+     && /usr/lib/jvm/java-1.8-openjdk/bin/javac /opt/start/Start.java \
+     && chmod +x /opt/start/Start.class \
+     && rm -rf /tmp/install /opt/minecraft/forge-install.jar.log /opt/minecraft/mods /opt/start/Start.java \
+   " \
+ && apk del --no-cache .build-dependencies
+
 # ------------
 # Expose ports
 # ------------
