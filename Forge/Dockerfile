@@ -8,13 +8,13 @@ LABEL maintainer "docker@marcermarc.de"
 ARG VERSION=latest
 
 # -----------------------------------------------------------------------------------------------------------
-# Define heap and extra params
-# Default extra params from:
+# Define workdir
+# Default command; the jvm parameters are from:
 #  https://aquifermc.org/threads/optimizing-paper-remove-lag-spikes-fix-tps-improve-performance.101/#post-822
 # Set the classpath can start the Start.class
 # -----------------------------------------------------------------------------------------------------------
-ENV HEAP=2G \
-  PARAMS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace" \
+ENV WORKDIR="/mnt/minecraft" \
+  COMMAND="java -Xmx2G -Xms2G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace -d64 -jar /opt/minecraft/forge.jar nogui" \
   CLASSPATH=/opt/start
 
 # --------------------------
@@ -59,4 +59,4 @@ USER minecraft
 #  1. The minecraft execute command ([HEAP] and [PARAM] are replaced by the startprogram)
 #  2. The minecraft workdir
 # ---------------------------------------------------------------------------------------
-ENTRYPOINT ["java", "Start", "java -Xmx&HEAP& -Xms&HEAP& &PARAMS& -d64 -jar /opt/minecraft/forge.jar nogui", "/mnt/minecraft"]
+ENTRYPOINT ["java", "Start"]
