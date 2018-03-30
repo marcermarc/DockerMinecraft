@@ -77,9 +77,7 @@ VOLUME ["/mnt/minecraft"]
 # ----------------
 USER minecraft
 
-# ---------------------------------------------------------------------------------------
-# Start the Start.class with two parameters:
-#  1. The minecraft execute command (&HEAP& and &PARAM& are replaced by the startprogram)
-#  2. The minecraft workdir
-# ---------------------------------------------------------------------------------------
+# ---------------------
+# Start the Start.class
+# ---------------------
 ENTRYPOINT ["java", "Start"]

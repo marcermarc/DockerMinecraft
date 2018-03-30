@@ -5,8 +5,6 @@ services:
     image: marcermarc/forge:latest
     volumes:
       - ./data:/mnt/minecraft
-    environment:
-      - HEAP=1G
     ports:
       - 25565:25565/tcp
       - 25565:25565/udp

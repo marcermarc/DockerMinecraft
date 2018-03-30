@@ -4,8 +4,6 @@ services:
     image: marcermarc/spigot:latest
     volumes:
       - ./data:/mnt/minecraft
-    environment:
-      - HEAP=2G
     ports:
       - 25565:25565/tcp
       - 25565:25565/udp
