@@ -11,14 +11,17 @@ ARG VERSION=latest
 # ---------------------------------
 # Download and install forge server
 # ---------------------------------
-RUN apk add --update --no-cache jq curl \
- && if [ "$VERSION" = "latest" ]; then export INDEX="index"; else export INDEX="index_${VERSION}"; fi \
+RUN apk add --update --no-cache libxml2-utils curl \
+ && if [ "$VERSION" = "latest" ]; then \
+      export VERSION=$( curl "http://files.minecraftforge.net/maven/net/minecraftforge/forge/maven-metadata.xml" | xmllint --xpath "/metadata/versioning/release/text()" - ) \
+    ; else \
+      export VERSION=$( curl "http://files.minecraftforge.net/maven/net/minecraftforge/forge/maven-metadata.xml" | xmllint --xpath "/metadata/versioning/versions/version[starts-with(text(),'${VERSION}')][last()]/text()" - ) \
+    ; fi \
  && cd /tmp \
  && mkdir installer \
- && curl -o /tmp/installer/forge-install.jar "https://files.minecraftforge.net/maven/net/minecraftforge/forge/$(curl https://files.minecraftforge.net/maven/net/minecraftforge/forge/${INDEX}.json | jq --raw-output '.md.versions | map(select(.marker == "LATEST"))[0].classifiers.installer.path')" \
+ && curl -o /tmp/installer/forge-install.jar "https://files.minecraftforge.net/maven/net/minecraftforge/forge/${VERSION}/forge-${VERSION}-installer.jar" \
  && java -jar /tmp/installer/forge-install.jar --installServer \
- && mv /tmp/forge-*.jar /tmp/forge.jar \
- && ls
+ && mv /tmp/forge-*.jar /tmp/forge.jar
 
 #####################
 # Build Start.class #
