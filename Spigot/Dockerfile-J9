@@ -1,0 +1,82 @@
+####################
+# Build Spigot.jar #
+####################
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim as buildspigot
+
+# --------------
+# Define version
+# --------------
+ARG VERSION=latest
+
+# ------------------------------
+# Compile Spigot with BuildTools
+# ------------------------------
+RUN apk add --update --no-cache git wget \
+ && cd /tmp \
+ && wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar \
+ && java -jar BuildTools.jar --rev $VERSION \
+ && mv spigot-*.jar spigot.jar
+
+#####################
+# Build Start.class #
+#####################
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim as starter
+
+# ------------------
+# Compile Start.java
+# ------------------
+RUN apk add --update --no-cache wget \
+ && cd /tmp/ \
+ && wget https://raw.githubusercontent.com/marcermarc/DockerMinecraft/master/StartProgram/Start.java --no-check-certificate \
+ && javac Start.java \
+ && chmod +x Start.class
+
+#######
+# Run #
+#######
+FROM adoptopenjdk/openjdk11-openj9:alpine-jre
+
+LABEL maintainer "docker@marcermarc.de"
+
+# -----------------------------------------------------------------------------------------------------------
+# Default extra params from:
+#  https://steinborn.me/posts/tuning-minecraft-openj9/
+# Set the classpath can start the Start.class
+# -----------------------------------------------------------------------------------------------------------
+ENV WORKDIR="/mnt/minecraft" \
+  COMMAND="java -Xms4096M -Xmx4096M -Xmns2048M -Xmnx3276M -Xgc:concurrentScavenge -Xgc:dnssExpectedTimeRatioMaximum=3 -Xgc:scvNoAdaptiveTenure -Xdisableexplicitgc -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/spigot.jar nogui" \
+  CLASSPATH=/opt/start
+
+# --------------------------------
+# Copy files from the build images
+# --------------------------------
+COPY --from=buildspigot /tmp/spigot.jar /opt/minecraft/
+COPY --from=starter /tmp/*.class /opt/start/
+
+# ------------------
+# Add user minecraft
+# ------------------
+RUN mkdir -p /mnt/minecraft \ 
+ && adduser -D minecraft -h /opt \
+ && chown -R minecraft /mnt/minecraft /opt \
+ && chmod -R 777 /mnt/minecraft /opt
+
+# ------------
+# Expose ports
+# ------------
+EXPOSE 25565:25565/tcp 25565:25565/udp
+
+# -------------
+# Define volume
+# -------------
+VOLUME ["/mnt/minecraft"]
+
+# ----------------
+# Set startup user
+# ----------------
+USER minecraft
+
+# ---------------------
+# Start the Start.class
+# ---------------------
+ENTRYPOINT ["java", "Start"]

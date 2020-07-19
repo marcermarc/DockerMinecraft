@@ -1,0 +1,76 @@
+#######################
+# Build paperclip.jar #
+#######################
+FROM maven:3-adoptopenjdk-11-openj9 as buildpaper
+
+# --------------
+# Define version
+# --------------
+ARG VERSION=latest
+
+# -----------
+# Build paper
+# -----------
+COPY buildPaper.sh /tmp/
+RUN sh /tmp/buildPaper.sh
+
+#####################
+# Build Start.class #
+#####################
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim as starter
+
+# ------------------
+# Compile Start.java
+# ------------------
+COPY ../StartProgram/* /tmp/
+RUN sh buildStart.sh
+
+#######
+# Run #
+#######
+FROM adoptopenjdk/openjdk11-openj9:alpine-jre
+
+LABEL maintainer "docker@marcermarc.de"
+
+# ----------------------------------------------------
+# Default extra params from:
+#  https://steinborn.me/posts/tuning-minecraft-openj9/
+# Set the classpath can start the Start.class
+# ----------------------------------------------------
+ENV WORKDIR="/mnt/minecraft" \
+  COMMAND="java -Xms4096M -Xmx4096M -Xmns2048M -Xmnx3276M -Xgc:concurrentScavenge -Xgc:dnssExpectedTimeRatioMaximum=3 -Xgc:scvNoAdaptiveTenure -Xdisableexplicitgc -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/paperclip.jar nogui" \
+  CLASSPATH=/opt/start
+
+# --------------------------------
+# Copy files from the build images
+# --------------------------------
+COPY --from=buildpaper /tmp/paperclip.jar /opt/minecraft/
+COPY --from=starter /tmp/*.class /opt/start/
+
+# ------------------
+# Add user minecraft
+# ------------------
+RUN mkdir -p /mnt/minecraft \ 
+ && adduser -D minecraft -h /opt \
+ && chown -R minecraft /mnt/minecraft /opt \
+ && chmod -R 777 /mnt/minecraft /opt
+
+# ------------
+# Expose ports
+# ------------
+EXPOSE 25565:25565/tcp 25565:25565/udp
+
+# -------------
+# Define volume
+# -------------
+VOLUME ["/mnt/minecraft"]
+
+# ----------------
+# Set startup user
+# ----------------
+USER minecraft
+
+# ---------------------
+# Start the Start.class
+# ---------------------
+ENTRYPOINT ["java", "Start"]
