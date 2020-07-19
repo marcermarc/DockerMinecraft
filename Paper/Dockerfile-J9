@@ -26,7 +26,7 @@ FROM adoptopenjdk/openjdk11-openj9:alpine-slim as starter
 # Compile Start.java
 # ------------------
 COPY StartProgram/* /tmp/
-RUN sh buildStart.sh
+RUN sh /tmp/buildStart.sh
 
 #######
 # Run #
