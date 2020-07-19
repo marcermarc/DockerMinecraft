@@ -11,7 +11,7 @@ ARG VERSION=latest
 # -----------
 # Build paper
 # -----------
-COPY Paper/buildPaper.sh /tmp/
+COPY buildPaper.sh /tmp/
 RUN sh /tmp/buildPaper.sh
 
 #####################
@@ -22,7 +22,7 @@ FROM adoptopenjdk/openjdk11-openj9:alpine-slim as starter
 # ------------------
 # Compile Start.java
 # ------------------
-COPY StartProgram/* /tmp/
+COPY ../StartProgram/* /tmp/
 RUN sh buildStart.sh
 
 #######
