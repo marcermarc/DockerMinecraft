@@ -11,7 +11,7 @@ ARG VERSION=latest
 # -----------
 # Build paper
 # -----------
-COPY buildPaper.sh /tmp/
+COPY Paper/buildPaper.sh /tmp/
 RUN sh /tmp/buildPaper.sh
 
 #####################
@@ -22,7 +22,7 @@ FROM openjdk:8-jdk-alpine as starter
 # ------------------
 # Compile Start.java
 # ------------------
-COPY ../StartProgram/* /tmp/
+COPY StartProgram/* /tmp/
 RUN sh buildStart.sh
 
 #######
