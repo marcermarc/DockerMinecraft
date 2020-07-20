@@ -47,7 +47,7 @@ ENV WORKDIR="/mnt/minecraft" \
 # --------------------------------
 # Copy files from the build images
 # --------------------------------
-COPY --from=buildpaper /tmp/paperclip.jar /opt/minecraft/
+COPY --from=buildpaper /tmp/paper/paperclip.jar /opt/minecraft/
 COPY --from=starter /tmp/*.class /opt/start/
 
 # ------------------
