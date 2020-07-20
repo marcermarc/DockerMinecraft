@@ -12,9 +12,9 @@ git config --global user.name "marcermarc"
 # select version-branch from paper repo
 if [ "$VERSION" = "latest" ]; then \
     export VERSION="master" \
-; elif git ls-remote -h https://github.com/PaperMC/Paper.git "ver/$VERSION" ; then \
+; elif [ -n "$(git ls-remote -h https://github.com/PaperMC/Paper.git "ver/$VERSION")" ] ; then \
     export VERSION="ver/$VERSION" \
-; elif git ls-remote -h https://github.com/PaperMC/Paper.git "ver/$(echo $VERSION | cut -c 1-4)" ; then \
+; elif [ -n "$(git ls-remote -h https://github.com/PaperMC/Paper.git "ver/$(echo $VERSION | cut -c 1-4)")" ] ; then \
     export VERSION="ver/$(echo $VERSION | cut -c 1-4)" \
 ; else \
     export VERSION="master" \
