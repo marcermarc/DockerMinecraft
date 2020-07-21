@@ -1,7 +1,7 @@
 #######################
 # Build paperclip.jar #
 #######################
-FROM maven:3-openjdk-8 as loadpaper
+FROM maven:3-openjdk-11 as loadpaper
 
 # --------------
 # Define version
@@ -17,7 +17,7 @@ RUN sh /tmp/buildPaper.sh
 #####################
 # Build Start.class #
 #####################
-FROM openjdk:8-jdk-alpine as starter
+FROM openjdk:11-jdk-alpine as starter
 
 # ------------------
 # Compile Start.java
@@ -51,7 +51,7 @@ COPY --from=starter /tmp/*.class /opt/start/
 # Add user minecraft
 # ------------------
 RUN mkdir -p /mnt/minecraft \ 
- && apk add --no-cache openjdk8-jre-base \
+ && apk add --no-cache openjdk11-jre-base \
  && adduser -D minecraft -h /opt \
  && chown -R minecraft /mnt/minecraft /opt \
  && chmod -R 777 /mnt/minecraft /opt
