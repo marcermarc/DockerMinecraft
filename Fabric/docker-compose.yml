@@ -1,0 +1,12 @@
+version: "3"
+services:
+  fabric:
+    container_name: minecraft_fabric
+    image: marcermarc/fabricmc:latest
+    volumes:
+      - ./data:/mnt/minecraft
+    ports:
+      - 25565:25565/tcp
+      - 25565:25565/udp
+    stdin_open: true
+    tty: true
