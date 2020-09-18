@@ -47,9 +47,10 @@ LABEL maintainer "docker@marcermarc.de"
 # Default extra params from:
 #  https://aquifermc.org/threads/optimizing-paper-remove-lag-spikes-fix-tps-improve-performance.101/#post-822
 # Set the classpath can start the Start.class
+# The fabric parameters are set to not need the fabric-server-launcher.properties in volume
 # -----------------------------------------------------------------------------------------------------------
 ENV WORKDIR="/mnt/minecraft" \
-  COMMAND="java -Xmx2G -Xms2G -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Dfile.encoding=UTF-8 -jar /opt/minecraft/fabric-server-launch.jar nogui" \
+  COMMAND="java -Xmx2G -Xms2G -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Dfile.encoding=UTF-8 -Dfabric.gameJarPath=/opt/minecraft/server.jar -cp /opt/minecraft/* net.fabricmc.loader.launch.knot.KnotServer nogui" \
   CLASSPATH=/opt/start
 
 # --------------------------------
