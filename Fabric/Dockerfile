@@ -1,7 +1,7 @@
 ##################
 # Install Fabirc #
 ##################
-FROM openjdk:11-jdk-alpine as installfabric
+FROM adoptopenjdk/openjdk11:alpine-slim as installfabric
 
 # --------------
 # Define version
@@ -25,7 +25,7 @@ RUN apk add --update --no-cache curl unzip \
 #####################
 # Build Start.class #
 #####################
-FROM openjdk:11-jdk-alpine as starter
+FROM adoptopenjdk/openjdk11:alpine-slim as starter
 
 # ------------------
 # Compile Start.java
