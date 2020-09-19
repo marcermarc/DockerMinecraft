@@ -1,7 +1,7 @@
 ##################
 # Install Fabirc #
 ##################
-FROM openjdk:14-jdk-alpine as installfabric
+FROM openjdk:11-jdk-alpine as installfabric
 
 # --------------
 # Define version
@@ -25,7 +25,7 @@ RUN apk add --update --no-cache curl unzip \
 #####################
 # Build Start.class #
 #####################
-FROM openjdk:14-jdk-alpine as starter
+FROM openjdk:11-jdk-alpine as starter
 
 # ------------------
 # Compile Start.java
@@ -63,7 +63,7 @@ COPY --from=starter /tmp/*.class /opt/start/
 # Add user minecraft
 # ------------------
 RUN mkdir -p /mnt/minecraft \ 
- && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing openjdk14-jre-headless \
+ && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community openjdk11-jre-headless \
  && adduser -D minecraft -h /opt \
  && chown -R minecraft /mnt/minecraft /opt \
  && chmod -R 777 /mnt/minecraft /opt
