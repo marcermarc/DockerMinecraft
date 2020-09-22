@@ -3,7 +3,7 @@
 
 # install git
 apt-get update
-apt-get install -y git
+apt-get install -y git patch
 
 # configure git (without paper will not build)
 git config --global user.email "docker@marcermarc.de"
