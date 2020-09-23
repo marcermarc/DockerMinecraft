@@ -17,7 +17,7 @@ RUN sh /tmp/buildPaper.sh
 #####################
 # Build Start.class #
 #####################
-FROM openjdk:11-jdk-alpine as starter
+FROM adoptopenjdk/openjdk11:alpine-slim as starter
 
 # ------------------
 # Compile Start.java
@@ -38,7 +38,7 @@ LABEL maintainer "docker@marcermarc.de"
 # Set the classpath can start the Start.class
 # -----------------------------------------------------------------------------------------------------------
 ENV WORKDIR="/mnt/minecraft" \
-  COMMAND="java -Xmx2G -Xms2G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace -d64 -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/paperclip.jar nogui" \
+  COMMAND="java -Xmx2G -Xms2G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace -Dcom.mojang.eula.agree=true -Dfile.encoding=UTF-8 -jar /opt/minecraft/paperclip.jar nogui" \
   CLASSPATH=/opt/start
 
 # --------------------------------
@@ -51,7 +51,7 @@ COPY --from=starter /tmp/*.class /opt/start/
 # Add user minecraft
 # ------------------
 RUN mkdir -p /mnt/minecraft \ 
- && apk add --no-cache openjdk11-jre-base \
+ && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community openjdk11-jre-headless \
  && adduser -D minecraft -h /opt \
  && chown -R minecraft /mnt/minecraft /opt \
  && chmod -R 777 /mnt/minecraft /opt
