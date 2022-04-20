@@ -1,3 +1,5 @@
+I've reworked my idea into this reposetory: https://github.com/marcermarc/DockerMinecraftHelper
+
 # DockerMinecraft
 A Docker Image for Minecraft
 (Different Server possibilities)
